@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carta Animada</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffe0e6 0%, #e0eaff 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .mensaje-titulo {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5em;
+            color: #d94f9b;
+            font-family: 'Brush Script MT', cursive, Arial;
+            text-shadow: 0 2px 8px #fff;
+            z-index: 2;
+        }
+        .sobre-container {
+            position: relative;
+            width: 340px;
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+        .sobre {
+            position: absolute;
+            width: 320px;
+            height: 180px;
+            background: #f8d7e3;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(220, 20, 60, 0.15);
+            overflow: hidden;
+            z-index: 2;
+        }
+        .sobre-triangulo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 90px;
+            background: transparent;
+            z-index: 3;
+        }
+        .sobre-triangulo svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .sello {
+            position: absolute;
+            left: 50%;
+            top: 80px;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: #e75480;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(220, 20, 60, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 4;
+            transition: box-shadow 0.2s;
+        }
+        .sello span {
+            color: #fff;
+            font-size: 2em;
+        }
+        .sobre-oculto {
+            display: none;
+        }
+        .carta {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 340px;
+            height: 380px;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            z-index: 10;
+            background: url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80') center/cover no-repeat;
+            background-blend-mode: screen;
+            background-color: #fff8f0;
+            border-radius: 18px;
+            box-shadow: 0 4px 32px rgba(220, 20, 60, 0.15);
+            padding: 35px 30px 30px 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            transition: opacity 1s;
+            pointer-events: none;
+        }
+        .carta.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .carta .lugar {
+            position: absolute;
+            top: 18px;
+            right: 28px;
+            font-size: 0.95em;
+            color: #b48e8e;
+            font-family: 'Segoe Script', cursive;
+        }
+        .carta .texto {
+            font-family: 'Dancing Script', cursive, Arial;
+            font-size: 1.25em;
+            color: #3d2c2c;
+            margin-bottom: 20px;
+            margin-top: 200px; /* Aumenta el margen superior */
+            text-align: center;
+        }
+        .carta .firma {
+            color: #d94f9b;
+            font-family: 'Brush Script MT', cursive, Arial;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 10px;
+            align-self: flex-end;
+        }
+        .carta .ositos {
+            width: 70px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            align-self: center;
+        }
+        .corazones-carta {
+            position: absolute;
+            left: 0; right: 0; bottom: 0; top: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .corazon-carta {
+            position: absolute;
+            font-size: 1.2em;
+            color: #e75480;
+            opacity: 0.7;
+        }
+        .corazon-carta:nth-child(1) { top: 10px; left: 10px;}
+        .corazon-carta:nth-child(2) { top: 10px; right: 10px;}
+        .corazon-carta:nth-child(3) { bottom: 10px; left: 10px;}
+        .corazon-carta:nth-child(4) { bottom: 10px; right: 10px;}
+        .corazon-carta:nth-child(5) { display: none;}
+        .corazon-carta:nth-child(6) { display: none;}
+    </style>
+    <!-- Puedes agregar fuentes de Google Fonts si lo deseas -->
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script:700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Brush+Script+MT&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="mensaje-titulo">Un Mensaje Especial para Ti</div>
+    <div class="sobre-container" id="sobreContainer">
+        <div class="sobre" id="sobre">
+            <div class="sobre-triangulo">
+                <!-- Triángulo SVG para la tapa del sobre -->
+                <svg viewBox="0 0 320 90">
+                    <polygon points="0,0 320,0 160,90" fill="#f4b6c2"/>
+                </svg>
+            </div>
+        </div>
+        <div class="sello" id="sello">
+            <span style="color:#fff;">❤</span>
+        </div>
+    </div>
+    <div class="carta" id="carta">
+        <span class="lugar">Donde el tiempo no existe</span>
+        <div class="texto">
+            Mi estrella guía,<br>
+            Hay universos enteros en tus ojos, y he tenido la suerte de perderme en ellos.<br>
+            No eres un capítulo en mi historia, eres el libro entero.<br>
+            Gracias por ser mi calma en medio del caos, y mi más bonita casualidad.
+        </div>
+        <div class="firma">Con amor infinito,<br>Tu esposo Brandon.</div>
+        <div class="corazones-carta">
+            <span class="corazon-carta">💖</span>
+            <span class="corazon-carta">💗</span>
+            <span class="corazon-carta">💘</span>
+            <span class="corazon-carta">💝</span>
+            <span class="corazon-carta">💞</span>
+            <span class="corazon-carta">💕</span>
+        </div>
+    </div>
+    <script>
+        document.getElementById('sello').onclick = function() {
+            document.getElementById('sobreContainer').style.display = 'none';
+            document.getElementById('carta').classList.add('visible');
+        };
+    </script>
+</body>
+</html>
+
